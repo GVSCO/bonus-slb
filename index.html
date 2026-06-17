@@ -10,7 +10,7 @@
   <title>Bônus SLB</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     :root {
       --bg: #f5f5f3;
       --surface: #ffffff;
@@ -22,12 +22,17 @@
       --gun-text: #8c3820;
       --log-bg: #eaf3fb;
       --log-text: #1a5a8a;
-      --accent: #1a1a18;
       --danger: #c0392b;
       --radius: 12px;
       --radius-sm: 8px;
+      --pending-bg: #fef9ec;
+      --pending-text: #8a6a00;
+      --approved-bg: #eaf6ee;
+      --approved-text: #1a6b35;
+      --extracted-bg: #f0f0f0;
+      --extracted-text: #555550;
     }
- 
+
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #111110;
@@ -40,11 +45,16 @@
         --gun-text: #f0a080;
         --log-bg: #0d1f30;
         --log-text: #7ab8e8;
-        --accent: #f0f0ed;
         --danger: #e05a50;
+        --pending-bg: #2a2010;
+        --pending-text: #e0b840;
+        --approved-bg: #0d2a18;
+        --approved-text: #50d080;
+        --extracted-bg: #222220;
+        --extracted-text: #a0a09c;
       }
     }
- 
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
@@ -52,7 +62,7 @@
       min-height: 100dvh;
       -webkit-text-size-adjust: 100%;
     }
- 
+
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -61,31 +71,38 @@
       top: 0;
       z-index: 10;
     }
- 
-    header h1 {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-    }
- 
-    header p {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 1px;
-    }
- 
+
+    header h1 { font-size: 17px; font-weight: 600; color: var(--text); }
+    header p { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
     .main { padding: 16px 16px 100px; max-width: 480px; margin: 0 auto; }
- 
-    /* Cards de resumo */
+
+    /* Alert extração */
+    .alert-extraction {
+      background: #fff8e6;
+      border: 1px solid #f0c840;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #7a5a00;
+      display: none;
+    }
+    @media (prefers-color-scheme: dark) {
+      .alert-extraction { background: #2a2010; border-color: #806000; color: #e0b840; }
+    }
+    .alert-extraction strong { display: block; font-size: 13px; margin-bottom: 3px; }
+
+    /* Resumo */
     .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
- 
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 16px;
     }
- 
+
     .card-label {
       font-size: 11px;
       font-weight: 500;
@@ -94,37 +111,45 @@
       letter-spacing: 0.05em;
       margin-bottom: 6px;
     }
- 
-    .card-value {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1;
-    }
- 
-    .card-sub {
-      font-size: 11px;
-      color: var(--hint);
-      margin-top: 4px;
-    }
- 
+
+    .card-value { font-size: 20px; font-weight: 600; color: var(--text); line-height: 1; }
+    .card-sub { font-size: 11px; color: var(--hint); margin-top: 4px; }
+
     .card.highlight {
       grid-column: span 2;
       background: var(--text);
       border-color: var(--text);
     }
- 
     .card.highlight .card-label { color: rgba(255,255,255,0.55); }
     .card.highlight .card-value { color: #ffffff; font-size: 26px; }
     .card.highlight .card-sub { color: rgba(255,255,255,0.4); }
- 
+
     @media (prefers-color-scheme: dark) {
       .card.highlight { background: #f0f0ed; border-color: #f0f0ed; }
       .card.highlight .card-label { color: rgba(0,0,0,0.5); }
       .card.highlight .card-value { color: #111110; }
       .card.highlight .card-sub { color: rgba(0,0,0,0.35); }
     }
- 
+
+    /* Tabs de status */
+    .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+    .tab {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      background: var(--surface);
+      color: var(--muted);
+    }
+    .tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+    @media (prefers-color-scheme: dark) {
+      .tab.active { background: #f0f0ed; color: #111110; border-color: #f0f0ed; }
+    }
+
     /* Formulário */
     .section-label {
       font-size: 12px;
@@ -134,7 +159,7 @@
       letter-spacing: 0.05em;
       margin-bottom: 10px;
     }
- 
+
     .form-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -142,10 +167,8 @@
       padding: 16px;
       margin-bottom: 20px;
     }
- 
+
     .field { margin-bottom: 14px; }
-    .field:last-of-type { margin-bottom: 0; }
- 
     .field label {
       display: block;
       font-size: 12px;
@@ -153,7 +176,7 @@
       color: var(--muted);
       margin-bottom: 6px;
     }
- 
+
     .field input,
     .field select {
       width: 100%;
@@ -168,29 +191,35 @@
       appearance: none;
       font-family: inherit;
     }
- 
+
     .field input:focus,
-    .field select:focus {
-      border-color: var(--muted);
-      background: var(--surface);
-    }
- 
+    .field select:focus { border-color: var(--muted); background: var(--surface); }
+
     .field select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 14px center;
       padding-right: 36px;
     }
- 
+
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
- 
-    .err-msg {
+
+    .divisao-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; margin-bottom: 14px; }
+    .divisao-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+    .divisao-toggle input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+
+    .conversion-hint {
       font-size: 12px;
-      color: var(--danger);
-      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--log-bg);
+      border-radius: var(--radius-sm);
+      color: var(--log-text);
+      margin-bottom: 14px;
       display: none;
     }
- 
+
+    .err-msg { font-size: 12px; color: var(--danger); margin-top: 10px; display: none; }
+
     .btn-add {
       width: 100%;
       margin-top: 14px;
@@ -203,43 +232,29 @@
       border-radius: var(--radius-sm);
       cursor: pointer;
       font-family: inherit;
-      letter-spacing: 0.01em;
     }
- 
     .btn-add:active { opacity: 0.8; transform: scale(0.99); }
- 
-    @media (prefers-color-scheme: dark) {
-      .btn-add { color: #111110; background: #f0f0ed; }
-    }
- 
-    /* Lista de operações */
+    @media (prefers-color-scheme: dark) { .btn-add { color: #111110; background: #f0f0ed; } }
+
+    /* Lista */
     .list { display: flex; flex-direction: column; gap: 8px; }
- 
+
     .entry {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
     }
- 
-    .entry-info { flex: 1; min-width: 0; }
- 
+
     .entry-top {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
- 
-    .ticket {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
- 
+
+    .ticket { font-size: 15px; font-weight: 600; color: var(--text); }
+
     .badge {
       font-size: 10px;
       font-weight: 600;
@@ -247,46 +262,73 @@
       border-radius: 999px;
       letter-spacing: 0.03em;
     }
- 
     .badge-gun { background: var(--gun-bg); color: var(--gun-text); }
     .badge-log { background: var(--log-bg); color: var(--log-text); }
- 
-    .entry-bottom {
-      font-size: 12px;
-      color: var(--muted);
-    }
- 
-    .entry-bonus {
-      text-align: right;
-      flex-shrink: 0;
-    }
- 
-    .bonus-value {
-      font-size: 16px;
+
+    .status-badge {
+      font-size: 10px;
       font-weight: 600;
-      color: var(--text);
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+      margin-left: auto;
     }
- 
-    .bonus-fatura {
+    .status-pending  { background: var(--pending-bg);  color: var(--pending-text); }
+    .status-approved { background: var(--approved-bg); color: var(--approved-text); }
+    .status-extracted{ background: var(--extracted-bg); color: var(--extracted-text); }
+
+    .entry-body {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .entry-left { flex: 1; min-width: 0; }
+    .entry-date { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .entry-fatura { font-size: 12px; color: var(--hint); }
+
+    .entry-right { text-align: right; flex-shrink: 0; }
+    .bonus-value { font-size: 16px; font-weight: 600; color: var(--text); }
+    .bonus-sub { font-size: 11px; color: var(--hint); margin-top: 2px; }
+
+    .entry-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-status {
+      flex: 1;
+      padding: 7px 6px;
       font-size: 11px;
-      color: var(--hint);
-      margin-top: 2px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
     }
- 
+    .btn-status.active-pending  { background: var(--pending-bg);  color: var(--pending-text);  border-color: var(--pending-text); }
+    .btn-status.active-approved { background: var(--approved-bg); color: var(--approved-text); border-color: var(--approved-text); }
+    .btn-status.active-extracted{ background: var(--extracted-bg);color: var(--extracted-text);border-color: var(--extracted-text); }
+
     .btn-del {
+      padding: 7px 10px;
       background: none;
-      border: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       cursor: pointer;
       color: var(--hint);
-      padding: 6px;
-      border-radius: 6px;
-      font-size: 18px;
+      font-size: 14px;
       line-height: 1;
-      flex-shrink: 0;
     }
- 
-    .btn-del:active { color: var(--danger); background: var(--gun-bg); }
- 
+    .btn-del:active { color: var(--danger); }
+
     .empty {
       text-align: center;
       padding: 40px 20px;
@@ -294,37 +336,75 @@
       font-size: 14px;
       line-height: 1.6;
     }
- 
     .empty strong { display: block; font-size: 16px; color: var(--muted); margin-bottom: 6px; }
+
+    .sync-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      z-index: 20;
+    }
+    .sync-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #ccc;
+      margin-right: 6px;
+      display: inline-block;
+    }
+    .sync-dot.ok { background: #40b060; }
+    .sync-dot.err { background: #d04030; }
+    .sync-dot.loading { background: #e0a020; }
+    .btn-sync {
+      padding: 5px 12px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+    }
   </style>
 </head>
 <body>
- 
+
 <header>
   <h1>Bônus SLB</h1>
   <p>Canhoneio 2% · Perfilagem 1%</p>
 </header>
- 
+
 <main class="main">
- 
-  <div class="summary" id="summary">
+
+  <div class="alert-extraction" id="alert-extraction">
+    <strong>⚠️ Atenção — janela de extração aberta</strong>
+    <span id="alert-text"></span>
+  </div>
+
+  <div class="summary">
     <div class="card highlight">
-      <div class="card-label">Total a receber</div>
+      <div class="card-label">Meu total a receber</div>
       <div class="card-value" id="m-total">R$ 0,00</div>
-      <div class="card-sub" id="m-ops">0 operações registradas</div>
+      <div class="card-sub" id="m-ops">0 operações</div>
     </div>
     <div class="card">
-      <div class="card-label">Canhoneio (2%)</div>
-      <div class="card-value" id="m-gun">R$ 0,00</div>
-      <div class="card-sub" id="m-gun-n">0 tickets</div>
+      <div class="card-label">Aprovados</div>
+      <div class="card-value" id="m-approved">R$ 0,00</div>
+      <div class="card-sub" id="m-approved-n">0 tickets</div>
     </div>
     <div class="card">
-      <div class="card-label">Perfilagem (1%)</div>
-      <div class="card-value" id="m-log">R$ 0,00</div>
-      <div class="card-sub" id="m-log-n">0 tickets</div>
+      <div class="card-label">Pendentes</div>
+      <div class="card-value" id="m-pending">R$ 0,00</div>
+      <div class="card-sub" id="m-pending-n">0 tickets</div>
     </div>
   </div>
- 
+
   <div class="section-label">Nova operação</div>
   <div class="form-card">
     <div class="field-row">
@@ -351,144 +431,378 @@
         <option value="USD">US$ Dólar (USD)</option>
       </select>
     </div>
+    <div class="conversion-hint" id="conversion-hint">
+      Cotação: US$ 1,00 = R$ 5,50 · valor convertido automaticamente
+    </div>
     <div class="field">
       <label for="f-value" id="f-value-label">Valor da fatura (R$)</label>
       <input type="number" id="f-value" placeholder="0,00" inputmode="decimal" min="0" step="0.01">
     </div>
-    <div id="conversion-hint" style="display:none; font-size:12px; color:var(--muted); margin-top:-8px; margin-bottom:4px; padding: 8px 10px; background: var(--log-bg); border-radius: var(--radius-sm); color: var(--log-text);">
-      Cotação: US$ 1,00 = R$ 5,50 · valor convertido automaticamente
+
+    <div class="divisao-row">
+      <label class="divisao-toggle">
+        <input type="checkbox" id="f-split" onchange="toggleSplit()">
+        Dividir com supervisor
+      </label>
+      <div class="field" id="split-field" style="display:none; margin-bottom:0;">
+        <input type="number" id="f-mypct" placeholder="Minha % (ex: 60)" min="1" max="100" step="1" inputmode="numeric">
+      </div>
     </div>
+
     <p class="err-msg" id="err">Preencha todos os campos corretamente.</p>
     <button class="btn-add" onclick="addEntry()">Adicionar operação</button>
   </div>
- 
-  <div class="section-label">Histórico</div>
+
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+    <div class="section-label" style="margin-bottom:0;">Histórico</div>
+    <div style="display:flex; gap:6px;">
+      <button class="tab active" id="tab-all"       onclick="setTab('all')">Todos</button>
+      <button class="tab"        id="tab-pending"   onclick="setTab('pending')">Pendentes</button>
+      <button class="tab"        id="tab-approved"  onclick="setTab('approved')">Aprovados</button>
+      <button class="tab"        id="tab-extracted" onclick="setTab('extracted')">Extraídos</button>
+    </div>
+  </div>
+
   <div class="list" id="list">
     <div class="empty"><strong>Nenhuma operação ainda</strong>Adicione sua primeira operação acima.</div>
   </div>
- 
+
 </main>
- 
+
+<div class="sync-bar">
+  <div style="display:flex;align-items:center;">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span id="sync-label">Configurar sync →</span>
+  </div>
+  <button class="btn-sync" onclick="openSettings()">⚙ Config</button>
+</div>
+
+<!-- Modal config -->
+<div id="modal-bg" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:30; display:none; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border-radius:var(--radius); padding:20px; width:100%; max-width:400px;">
+    <h2 style="font-size:15px; font-weight:600; margin-bottom:14px;">Configuração de sync</h2>
+    <div class="field">
+      <label for="cfg-url">URL do Apps Script</label>
+      <input type="url" id="cfg-url" placeholder="https://script.google.com/macros/s/...">
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:14px;">Cole aqui a URL gerada após publicar o Apps Script como Web App.</p>
+    <div style="display:flex; gap:8px;">
+      <button class="btn-add" style="margin-top:0;" onclick="saveConfig()">Salvar</button>
+      <button class="btn-add" style="margin-top:0; background:var(--bg); color:var(--muted); border:1px solid var(--border);" onclick="closeSettings()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <script>
+  const USD_TO_BRL = 5.50;
   let entries = [];
-  try { entries = JSON.parse(localStorage.getItem('slb_bonus') || '[]'); } catch(e) {}
- 
+  let activeTab = 'all';
+  let scriptUrl = '';
+
+  try { entries = JSON.parse(localStorage.getItem('slb_bonus_v2') || '[]'); } catch(e) {}
+  try { scriptUrl = localStorage.getItem('slb_script_url') || ''; } catch(e) {}
+
   function save() {
-    try { localStorage.setItem('slb_bonus', JSON.stringify(entries)); } catch(e) {}
+    try { localStorage.setItem('slb_bonus_v2', JSON.stringify(entries)); } catch(e) {}
   }
- 
+
   function fmt(n) {
     return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
- 
+
   function fmtDate(d) {
     if (!d) return '';
     const [y, m, day] = d.split('-');
     return `${day}/${m}/${y}`;
   }
- 
-  const USD_TO_BRL = 5.50;
- 
+
   function updateCurrencyLabel() {
     const currency = document.getElementById('f-currency').value;
     const label = document.getElementById('f-value-label');
     const hint = document.getElementById('conversion-hint');
-    if (currency === 'USD') {
-      label.textContent = 'Valor da fatura (US$)';
-      hint.style.display = 'block';
-    } else {
-      label.textContent = 'Valor da fatura (R$)';
-      hint.style.display = 'none';
-    }
+    label.textContent = currency === 'USD' ? 'Valor da fatura (US$)' : 'Valor da fatura (R$)';
+    hint.style.display = currency === 'USD' ? 'block' : 'none';
   }
- 
+
+  function toggleSplit() {
+    const checked = document.getElementById('f-split').checked;
+    document.getElementById('split-field').style.display = checked ? 'block' : 'none';
+  }
+
+  function setTab(tab) {
+    activeTab = tab;
+    ['all','pending','approved','extracted'].forEach(t => {
+      document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+    });
+    renderList();
+  }
+
   function addEntry() {
-    const ticket = document.getElementById('f-ticket').value.trim();
-    const date = document.getElementById('f-date').value;
-    const type = document.getElementById('f-type').value;
+    const ticket   = document.getElementById('f-ticket').value.trim();
+    const date     = document.getElementById('f-date').value;
+    const type     = document.getElementById('f-type').value;
     const currency = document.getElementById('f-currency').value;
-    const raw = document.getElementById('f-value').value;
-    const inputValue = parseFloat(raw);
-    const err = document.getElementById('err');
- 
-    if (!ticket || !date || !raw || isNaN(inputValue) || inputValue <= 0) {
+    const raw      = document.getElementById('f-value').value;
+    const inputVal = parseFloat(raw);
+    const split    = document.getElementById('f-split').checked;
+    const myPctRaw = document.getElementById('f-mypct').value;
+    const myPct    = split ? parseFloat(myPctRaw) : 100;
+    const err      = document.getElementById('err');
+
+    if (!ticket || !date || !raw || isNaN(inputVal) || inputVal <= 0 || (split && (isNaN(myPct) || myPct <= 0 || myPct > 100))) {
       err.style.display = 'block';
       return;
     }
     err.style.display = 'none';
- 
-    const valueUSD = currency === 'USD' ? inputValue : null;
-    const valueBRL = currency === 'USD' ? inputValue * USD_TO_BRL : inputValue;
- 
+
+    const valueOriginal = inputVal;
+    const valueBRL = currency === 'USD' ? inputVal * USD_TO_BRL : inputVal;
     const rate = type === 'gun' ? 0.02 : 0.01;
-    const bonus = valueBRL * rate;
-    entries.unshift({ id: Date.now(), ticket, date, type, currency, valueUSD, valueBRL, bonus });
+    const bonusBruto = valueBRL * rate;
+    const myValueBRL = valueBRL * (myPct / 100);
+    const myBonus = bonusBruto * (myPct / 100);
+
+    const entry = {
+      id: Date.now(),
+      ticket, date, type,
+      currency, valueOriginal, valueBRL,
+      myPercent: myPct, myValueBRL,
+      bonusBruto, myBonus,
+      status: 'pending'
+    };
+
+    entries.unshift(entry);
     save();
+    syncAdd(entry);
     render();
- 
+
     document.getElementById('f-ticket').value = '';
     document.getElementById('f-value').value = '';
-    document.getElementById('f-date').value = '';
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
     document.getElementById('f-currency').value = 'BRL';
+    document.getElementById('f-split').checked = false;
+    document.getElementById('f-mypct').value = '';
+    document.getElementById('split-field').style.display = 'none';
     updateCurrencyLabel();
   }
- 
+
+  function changeStatus(id, status) {
+    const e = entries.find(x => x.id === id);
+    if (!e) return;
+    e.status = status;
+    save();
+    syncUpdate(id, status);
+    render();
+  }
+
   function removeEntry(id) {
     if (!confirm('Remover esta operação?')) return;
     entries = entries.filter(e => e.id !== id);
     save();
+    syncDelete(id);
     render();
   }
- 
+
   function render() {
-    const guns = entries.filter(e => e.type === 'gun');
-    const logs = entries.filter(e => e.type === 'log');
-    const total = entries.reduce((s, e) => s + e.bonus, 0);
-    const gunTotal = guns.reduce((s, e) => s + e.bonus, 0);
-    const logTotal = logs.reduce((s, e) => s + e.bonus, 0);
- 
-    document.getElementById('m-total').textContent = fmt(total);
-    document.getElementById('m-ops').textContent = `${entries.length} operaç${entries.length !== 1 ? 'ões' : 'ão'} registrada${entries.length !== 1 ? 's' : ''}`;
-    document.getElementById('m-gun').textContent = fmt(gunTotal);
-    document.getElementById('m-gun-n').textContent = `${guns.length} ticket${guns.length !== 1 ? 's' : ''}`;
-    document.getElementById('m-log').textContent = fmt(logTotal);
-    document.getElementById('m-log-n').textContent = `${logs.length} ticket${logs.length !== 1 ? 's' : ''}`;
- 
+    updateCards();
+    renderList();
+    checkExtractionAlert();
+  }
+
+  function updateCards() {
+    const pending  = entries.filter(e => e.status === 'pending');
+    const approved = entries.filter(e => e.status === 'approved');
+    const total    = entries.filter(e => e.status !== 'extracted').reduce((s,e) => s + e.myBonus, 0);
+    const apprVal  = approved.reduce((s,e) => s + e.myBonus, 0);
+    const pendVal  = pending.reduce((s,e) => s + e.myBonus, 0);
+
+    document.getElementById('m-total').textContent     = fmt(total);
+    document.getElementById('m-ops').textContent       = `${entries.length} operaç${entries.length !== 1 ? 'ões' : 'ão'}`;
+    document.getElementById('m-approved').textContent  = fmt(apprVal);
+    document.getElementById('m-approved-n').textContent= `${approved.length} ticket${approved.length !== 1 ? 's' : ''}`;
+    document.getElementById('m-pending').textContent   = fmt(pendVal);
+    document.getElementById('m-pending-n').textContent = `${pending.length} ticket${pending.length !== 1 ? 's' : ''}`;
+  }
+
+  function renderList() {
+    const filtered = activeTab === 'all' ? entries : entries.filter(e => e.status === activeTab);
     const list = document.getElementById('list');
-    if (entries.length === 0) {
-      list.innerHTML = '<div class="empty"><strong>Nenhuma operação ainda</strong>Adicione sua primeira operação acima.</div>';
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty"><strong>Nenhuma operação aqui</strong>Tente outro filtro ou adicione uma nova.</div>';
       return;
     }
- 
-    list.innerHTML = entries.map(e => {
-      const faturaOriginal = e.currency === 'USD'
-        ? `US$ ${e.valueUSD.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} → ${fmt(e.valueBRL)}`
-        : fmt(e.valueBRL !== undefined ? e.valueBRL : e.value);
-      const bonusVal = e.bonus;
+
+    const statusLabel = { pending: 'Pendente', approved: 'Aprovado', extracted: 'Extraído' };
+
+    list.innerHTML = filtered.map(e => {
+      const faturaLine = e.currency === 'USD'
+        ? `US$ ${e.valueOriginal.toLocaleString('pt-BR',{minimumFractionDigits:2})} → ${fmt(e.valueBRL)}`
+        : fmt(e.valueBRL);
+      const splitLine = e.myPercent < 100
+        ? `${e.myPercent}% seu · bônus bruto ${fmt(e.bonusBruto)}`
+        : `bônus bruto ${fmt(e.bonusBruto)}`;
+
       return `
       <div class="entry">
-        <div class="entry-info">
-          <div class="entry-top">
-            <span class="ticket">#${e.ticket}</span>
-            <span class="badge ${e.type === 'gun' ? 'badge-gun' : 'badge-log'}">${e.type === 'gun' ? 'CANHONEIO' : 'PERFILAGEM'}</span>
+        <div class="entry-top">
+          <span class="ticket">#${e.ticket}</span>
+          <span class="badge ${e.type === 'gun' ? 'badge-gun' : 'badge-log'}">${e.type === 'gun' ? 'CANHONEIO' : 'PERFILAGEM'}</span>
+          <span class="status-badge status-${e.status}">${statusLabel[e.status]}</span>
+        </div>
+        <div class="entry-body">
+          <div class="entry-left">
+            <div class="entry-date">${fmtDate(e.date)}</div>
+            <div class="entry-fatura">${faturaLine}</div>
+            <div class="entry-fatura" style="margin-top:2px;">${splitLine}</div>
           </div>
-          <div class="entry-bottom">${fmtDate(e.date)}</div>
+          <div class="entry-right">
+            <div class="bonus-value">${fmt(e.myBonus)}</div>
+            <div class="bonus-sub">meu bônus</div>
+          </div>
         </div>
-        <div class="entry-bonus">
-          <div class="bonus-value">${fmt(bonusVal)}</div>
-          <div class="bonus-fatura">${faturaOriginal}</div>
+        <div class="entry-actions">
+          <button class="btn-status ${e.status === 'pending'   ? 'active-pending'   : ''}" onclick="changeStatus(${e.id},'pending')">Pendente</button>
+          <button class="btn-status ${e.status === 'approved'  ? 'active-approved'  : ''}" onclick="changeStatus(${e.id},'approved')">Aprovado</button>
+          <button class="btn-status ${e.status === 'extracted' ? 'active-extracted' : ''}" onclick="changeStatus(${e.id},'extracted')">Extraído</button>
+          <button class="btn-del" onclick="removeEntry(${e.id})" aria-label="Remover">×</button>
         </div>
-        <button class="btn-del" onclick="removeEntry(${e.id})" aria-label="Remover">×</button>
-      </div>
-    `}).join('');
+      </div>`;
+    }).join('');
   }
- 
-  render();
- 
-  // Definir data de hoje como padrão
+
+  function checkExtractionAlert() {
+    const today = new Date();
+    const day = today.getDate();
+    const alert = document.getElementById('alert-extraction');
+    const alertText = document.getElementById('alert-text');
+
+    if (day >= 1 && day <= 4) {
+      const approved = entries.filter(e => e.status === 'approved');
+      if (approved.length > 0) {
+        const total = approved.reduce((s,e) => s + e.myBonus, 0);
+        alertText.textContent = `Você tem ${approved.length} bônus aprovado${approved.length > 1 ? 's' : ''} (${fmt(total)}) — extração acontece dia 5. Aprove todos até amanhã para garantir no salário deste mês.`;
+        alert.style.display = 'block';
+      } else {
+        alert.style.display = 'none';
+      }
+    } else if (day > 5) {
+      const approved = entries.filter(e => e.status === 'approved');
+      if (approved.length > 0) {
+        const total = approved.reduce((s,e) => s + e.myBonus, 0);
+        alertText.textContent = `Você tem ${approved.length} bônus aprovado${approved.length > 1 ? 's' : ''} (${fmt(total)}) aguardando extração. A próxima extração será dia 5 do mês que vem.`;
+        alert.style.display = 'block';
+      } else {
+        alert.style.display = 'none';
+      }
+    } else {
+      alert.style.display = 'none';
+    }
+  }
+
+  // ---- Sync com Google Sheets ----
+
+  function setSyncStatus(state, label) {
+    const dot = document.getElementById('sync-dot');
+    const lbl = document.getElementById('sync-label');
+    dot.className = 'sync-dot ' + state;
+    lbl.textContent = label;
+  }
+
+  async function syncAdd(entry) {
+    if (!scriptUrl) return;
+    try {
+      setSyncStatus('loading', 'Sincronizando...');
+      await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'add', entry }),
+      });
+      setSyncStatus('ok', 'Sincronizado');
+    } catch(e) { setSyncStatus('err', 'Erro no sync'); }
+  }
+
+  async function syncUpdate(id, status) {
+    if (!scriptUrl) return;
+    try {
+      setSyncStatus('loading', 'Sincronizando...');
+      await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'update', id, status }),
+      });
+      setSyncStatus('ok', 'Sincronizado');
+    } catch(e) { setSyncStatus('err', 'Erro no sync'); }
+  }
+
+  async function syncDelete(id) {
+    if (!scriptUrl) return;
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete', id }),
+      });
+    } catch(e) {}
+  }
+
+  async function syncFetch() {
+    if (!scriptUrl) { setSyncStatus('', 'Sync não configurado'); return; }
+    try {
+      setSyncStatus('loading', 'Buscando dados...');
+      const res = await fetch(scriptUrl + '?action=list');
+      const data = await res.json();
+      if (data.ok && data.entries.length > 0) {
+        entries = data.entries.map(r => ({
+          id:           r['ID'],
+          ticket:       r['Ticket'],
+          date:         r['Data'],
+          type:         r['Serviço'],
+          currency:     r['Moeda Original'],
+          valueOriginal:parseFloat(r['Valor Original']) || 0,
+          valueBRL:     parseFloat(r['Valor BRL']) || 0,
+          myPercent:    parseFloat(r['Minha % (%)']) || 100,
+          myValueBRL:   parseFloat(r['Meu Valor BRL']) || 0,
+          bonusBruto:   parseFloat(r['Bônus Bruto BRL']) || 0,
+          myBonus:      parseFloat(r['Meu Bônus BRL']) || 0,
+          status:       r['Status'] || 'pending',
+        }));
+        save();
+        render();
+        setSyncStatus('ok', 'Sincronizado agora');
+      } else {
+        setSyncStatus('ok', 'Sem dados no Sheets');
+      }
+    } catch(e) { setSyncStatus('err', 'Erro no sync'); }
+  }
+
+  function openSettings() {
+    document.getElementById('cfg-url').value = scriptUrl;
+    document.getElementById('modal-bg').style.display = 'flex';
+  }
+
+  function closeSettings() {
+    document.getElementById('modal-bg').style.display = 'none';
+  }
+
+  function saveConfig() {
+    scriptUrl = document.getElementById('cfg-url').value.trim();
+    try { localStorage.setItem('slb_script_url', scriptUrl); } catch(e) {}
+    closeSettings();
+    if (scriptUrl) syncFetch();
+    else setSyncStatus('', 'Sync não configurado');
+  }
+
+  // Init
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
+
+  if (scriptUrl) {
+    setSyncStatus('loading', 'Conectando...');
+    syncFetch();
+  } else {
+    setSyncStatus('', 'Sync não configurado');
+  }
+
+  render();
 </script>
- 
+
 </body>
 </html>
