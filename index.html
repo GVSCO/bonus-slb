@@ -10,7 +10,7 @@
   <title>Bônus SLB</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     :root {
       --bg: #f5f5f3;
       --surface: #ffffff;
@@ -27,7 +27,7 @@
       --radius: 12px;
       --radius-sm: 8px;
     }
-
+ 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #111110;
@@ -44,7 +44,7 @@
         --danger: #e05a50;
       }
     }
-
+ 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
@@ -52,7 +52,7 @@
       min-height: 100dvh;
       -webkit-text-size-adjust: 100%;
     }
-
+ 
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -61,31 +61,31 @@
       top: 0;
       z-index: 10;
     }
-
+ 
     header h1 {
       font-size: 17px;
       font-weight: 600;
       color: var(--text);
     }
-
+ 
     header p {
       font-size: 12px;
       color: var(--muted);
       margin-top: 1px;
     }
-
+ 
     .main { padding: 16px 16px 100px; max-width: 480px; margin: 0 auto; }
-
+ 
     /* Cards de resumo */
     .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-
+ 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 16px;
     }
-
+ 
     .card-label {
       font-size: 11px;
       font-weight: 500;
@@ -94,37 +94,37 @@
       letter-spacing: 0.05em;
       margin-bottom: 6px;
     }
-
+ 
     .card-value {
       font-size: 20px;
       font-weight: 600;
       color: var(--text);
       line-height: 1;
     }
-
+ 
     .card-sub {
       font-size: 11px;
       color: var(--hint);
       margin-top: 4px;
     }
-
+ 
     .card.highlight {
       grid-column: span 2;
       background: var(--text);
       border-color: var(--text);
     }
-
+ 
     .card.highlight .card-label { color: rgba(255,255,255,0.55); }
     .card.highlight .card-value { color: #ffffff; font-size: 26px; }
     .card.highlight .card-sub { color: rgba(255,255,255,0.4); }
-
+ 
     @media (prefers-color-scheme: dark) {
       .card.highlight { background: #f0f0ed; border-color: #f0f0ed; }
       .card.highlight .card-label { color: rgba(0,0,0,0.5); }
       .card.highlight .card-value { color: #111110; }
       .card.highlight .card-sub { color: rgba(0,0,0,0.35); }
     }
-
+ 
     /* Formulário */
     .section-label {
       font-size: 12px;
@@ -134,7 +134,7 @@
       letter-spacing: 0.05em;
       margin-bottom: 10px;
     }
-
+ 
     .form-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -142,10 +142,10 @@
       padding: 16px;
       margin-bottom: 20px;
     }
-
+ 
     .field { margin-bottom: 14px; }
     .field:last-of-type { margin-bottom: 0; }
-
+ 
     .field label {
       display: block;
       font-size: 12px;
@@ -153,7 +153,7 @@
       color: var(--muted);
       margin-bottom: 6px;
     }
-
+ 
     .field input,
     .field select {
       width: 100%;
@@ -168,29 +168,29 @@
       appearance: none;
       font-family: inherit;
     }
-
+ 
     .field input:focus,
     .field select:focus {
       border-color: var(--muted);
       background: var(--surface);
     }
-
+ 
     .field select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 14px center;
       padding-right: 36px;
     }
-
+ 
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
+ 
     .err-msg {
       font-size: 12px;
       color: var(--danger);
       margin-top: 10px;
       display: none;
     }
-
+ 
     .btn-add {
       width: 100%;
       margin-top: 14px;
@@ -205,16 +205,16 @@
       font-family: inherit;
       letter-spacing: 0.01em;
     }
-
+ 
     .btn-add:active { opacity: 0.8; transform: scale(0.99); }
-
+ 
     @media (prefers-color-scheme: dark) {
       .btn-add { color: #111110; background: #f0f0ed; }
     }
-
+ 
     /* Lista de operações */
     .list { display: flex; flex-direction: column; gap: 8px; }
-
+ 
     .entry {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -224,22 +224,22 @@
       align-items: center;
       gap: 12px;
     }
-
+ 
     .entry-info { flex: 1; min-width: 0; }
-
+ 
     .entry-top {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 4px;
     }
-
+ 
     .ticket {
       font-size: 15px;
       font-weight: 600;
       color: var(--text);
     }
-
+ 
     .badge {
       font-size: 10px;
       font-weight: 600;
@@ -247,32 +247,32 @@
       border-radius: 999px;
       letter-spacing: 0.03em;
     }
-
+ 
     .badge-gun { background: var(--gun-bg); color: var(--gun-text); }
     .badge-log { background: var(--log-bg); color: var(--log-text); }
-
+ 
     .entry-bottom {
       font-size: 12px;
       color: var(--muted);
     }
-
+ 
     .entry-bonus {
       text-align: right;
       flex-shrink: 0;
     }
-
+ 
     .bonus-value {
       font-size: 16px;
       font-weight: 600;
       color: var(--text);
     }
-
+ 
     .bonus-fatura {
       font-size: 11px;
       color: var(--hint);
       margin-top: 2px;
     }
-
+ 
     .btn-del {
       background: none;
       border: none;
@@ -284,9 +284,9 @@
       line-height: 1;
       flex-shrink: 0;
     }
-
+ 
     .btn-del:active { color: var(--danger); background: var(--gun-bg); }
-
+ 
     .empty {
       text-align: center;
       padding: 40px 20px;
@@ -294,19 +294,19 @@
       font-size: 14px;
       line-height: 1.6;
     }
-
+ 
     .empty strong { display: block; font-size: 16px; color: var(--muted); margin-bottom: 6px; }
   </style>
 </head>
 <body>
-
+ 
 <header>
   <h1>Bônus SLB</h1>
   <p>Canhoneio 2% · Perfilagem 1%</p>
 </header>
-
+ 
 <main class="main">
-
+ 
   <div class="summary" id="summary">
     <div class="card highlight">
       <div class="card-label">Total a receber</div>
@@ -324,7 +324,7 @@
       <div class="card-sub" id="m-log-n">0 tickets</div>
     </div>
   </div>
-
+ 
   <div class="section-label">Nova operação</div>
   <div class="form-card">
     <div class="field-row">
@@ -345,91 +345,127 @@
       </select>
     </div>
     <div class="field">
-      <label for="f-value">Valor da fatura (R$)</label>
+      <label for="f-currency">Moeda da fatura</label>
+      <select id="f-currency" onchange="updateCurrencyLabel()">
+        <option value="BRL">R$ Real (BRL)</option>
+        <option value="USD">US$ Dólar (USD)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="f-value" id="f-value-label">Valor da fatura (R$)</label>
       <input type="number" id="f-value" placeholder="0,00" inputmode="decimal" min="0" step="0.01">
+    </div>
+    <div id="conversion-hint" style="display:none; font-size:12px; color:var(--muted); margin-top:-8px; margin-bottom:4px; padding: 8px 10px; background: var(--log-bg); border-radius: var(--radius-sm); color: var(--log-text);">
+      Cotação: US$ 1,00 = R$ 5,50 · valor convertido automaticamente
     </div>
     <p class="err-msg" id="err">Preencha todos os campos corretamente.</p>
     <button class="btn-add" onclick="addEntry()">Adicionar operação</button>
   </div>
-
+ 
   <div class="section-label">Histórico</div>
   <div class="list" id="list">
     <div class="empty"><strong>Nenhuma operação ainda</strong>Adicione sua primeira operação acima.</div>
   </div>
-
+ 
 </main>
-
+ 
 <script>
   let entries = [];
   try { entries = JSON.parse(localStorage.getItem('slb_bonus') || '[]'); } catch(e) {}
-
+ 
   function save() {
     try { localStorage.setItem('slb_bonus', JSON.stringify(entries)); } catch(e) {}
   }
-
+ 
   function fmt(n) {
     return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
-
+ 
   function fmtDate(d) {
     if (!d) return '';
     const [y, m, day] = d.split('-');
     return `${day}/${m}/${y}`;
   }
-
+ 
+  const USD_TO_BRL = 5.50;
+ 
+  function updateCurrencyLabel() {
+    const currency = document.getElementById('f-currency').value;
+    const label = document.getElementById('f-value-label');
+    const hint = document.getElementById('conversion-hint');
+    if (currency === 'USD') {
+      label.textContent = 'Valor da fatura (US$)';
+      hint.style.display = 'block';
+    } else {
+      label.textContent = 'Valor da fatura (R$)';
+      hint.style.display = 'none';
+    }
+  }
+ 
   function addEntry() {
     const ticket = document.getElementById('f-ticket').value.trim();
     const date = document.getElementById('f-date').value;
     const type = document.getElementById('f-type').value;
+    const currency = document.getElementById('f-currency').value;
     const raw = document.getElementById('f-value').value;
-    const value = parseFloat(raw);
+    const inputValue = parseFloat(raw);
     const err = document.getElementById('err');
-
-    if (!ticket || !date || !raw || isNaN(value) || value <= 0) {
+ 
+    if (!ticket || !date || !raw || isNaN(inputValue) || inputValue <= 0) {
       err.style.display = 'block';
       return;
     }
     err.style.display = 'none';
-
+ 
+    const valueUSD = currency === 'USD' ? inputValue : null;
+    const valueBRL = currency === 'USD' ? inputValue * USD_TO_BRL : inputValue;
+ 
     const rate = type === 'gun' ? 0.02 : 0.01;
-    const bonus = value * rate;
-    entries.unshift({ id: Date.now(), ticket, date, type, value, bonus });
+    const bonus = valueBRL * rate;
+    entries.unshift({ id: Date.now(), ticket, date, type, currency, valueUSD, valueBRL, bonus });
     save();
     render();
-
+ 
     document.getElementById('f-ticket').value = '';
     document.getElementById('f-value').value = '';
     document.getElementById('f-date').value = '';
+    document.getElementById('f-currency').value = 'BRL';
+    updateCurrencyLabel();
   }
-
+ 
   function removeEntry(id) {
     if (!confirm('Remover esta operação?')) return;
     entries = entries.filter(e => e.id !== id);
     save();
     render();
   }
-
+ 
   function render() {
     const guns = entries.filter(e => e.type === 'gun');
     const logs = entries.filter(e => e.type === 'log');
     const total = entries.reduce((s, e) => s + e.bonus, 0);
     const gunTotal = guns.reduce((s, e) => s + e.bonus, 0);
     const logTotal = logs.reduce((s, e) => s + e.bonus, 0);
-
+ 
     document.getElementById('m-total').textContent = fmt(total);
     document.getElementById('m-ops').textContent = `${entries.length} operaç${entries.length !== 1 ? 'ões' : 'ão'} registrada${entries.length !== 1 ? 's' : ''}`;
     document.getElementById('m-gun').textContent = fmt(gunTotal);
     document.getElementById('m-gun-n').textContent = `${guns.length} ticket${guns.length !== 1 ? 's' : ''}`;
     document.getElementById('m-log').textContent = fmt(logTotal);
     document.getElementById('m-log-n').textContent = `${logs.length} ticket${logs.length !== 1 ? 's' : ''}`;
-
+ 
     const list = document.getElementById('list');
     if (entries.length === 0) {
       list.innerHTML = '<div class="empty"><strong>Nenhuma operação ainda</strong>Adicione sua primeira operação acima.</div>';
       return;
     }
-
-    list.innerHTML = entries.map(e => `
+ 
+    list.innerHTML = entries.map(e => {
+      const faturaOriginal = e.currency === 'USD'
+        ? `US$ ${e.valueUSD.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} → ${fmt(e.valueBRL)}`
+        : fmt(e.valueBRL !== undefined ? e.valueBRL : e.value);
+      const bonusVal = e.bonus;
+      return `
       <div class="entry">
         <div class="entry-info">
           <div class="entry-top">
@@ -439,20 +475,20 @@
           <div class="entry-bottom">${fmtDate(e.date)}</div>
         </div>
         <div class="entry-bonus">
-          <div class="bonus-value">${fmt(e.bonus)}</div>
-          <div class="bonus-fatura">${fmt(e.value)}</div>
+          <div class="bonus-value">${fmt(bonusVal)}</div>
+          <div class="bonus-fatura">${faturaOriginal}</div>
         </div>
         <button class="btn-del" onclick="removeEntry(${e.id})" aria-label="Remover">×</button>
       </div>
-    `).join('');
+    `}).join('');
   }
-
+ 
   render();
-
+ 
   // Definir data de hoje como padrão
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
 </script>
-
+ 
 </body>
 </html>
