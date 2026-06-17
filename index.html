@@ -419,7 +419,7 @@
     </div>
     <div class="field">
       <label for="f-type">Serviço</label>
-      <select id="f-type">
+      <select id="f-type" onchange="updatePreview()">
         <option value="gun">Canhoneio (2%)</option>
         <option value="log">Perfilagem (1%)</option>
       </select>
@@ -436,7 +436,7 @@
     </div>
     <div class="field">
       <label for="f-value" id="f-value-label">Valor da fatura (R$)</label>
-      <input type="number" id="f-value" placeholder="0,00" inputmode="decimal" min="0" step="0.01">
+      <input type="number" id="f-value" placeholder="0,00" inputmode="decimal" min="0" step="0.01" oninput="updatePreview()">
     </div>
 
     <div class="divisao-row">
@@ -445,10 +445,11 @@
         Dividir com supervisor
       </label>
       <div class="field" id="split-field" style="display:none; margin-bottom:0;">
-        <input type="number" id="f-mypct" placeholder="Minha % (ex: 60)" min="1" max="100" step="1" inputmode="numeric">
+        <input type="number" id="f-mypct" placeholder="Minha % (ex: 80)" min="1" max="100" step="1" inputmode="numeric" oninput="updatePreview()">
       </div>
     </div>
 
+    <div id="calc-preview" style="display:none; background:var(--approved-bg); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:4px; font-size:13px; color:var(--approved-text);"></div>
     <p class="err-msg" id="err">Preencha todos os campos corretamente.</p>
     <button class="btn-add" onclick="addEntry()">Adicionar operação</button>
   </div>
@@ -516,6 +517,27 @@
     return `${day}/${m}/${y}`;
   }
 
+  function updatePreview() {
+    const type     = document.getElementById('f-type').value;
+    const currency = document.getElementById('f-currency').value;
+    const raw      = document.getElementById('f-value').value;
+    const split    = document.getElementById('f-split').checked;
+    const myPctRaw = document.getElementById('f-mypct').value;
+    const inputVal = parseFloat(raw);
+    const myPct    = split ? parseFloat(myPctRaw) : 100;
+    const preview  = document.getElementById('calc-preview');
+
+    if (!raw || isNaN(inputVal) || inputVal <= 0) { preview.style.display = 'none'; return; }
+
+    const valueBRL = currency === 'USD' ? inputVal * USD_TO_BRL : inputVal;
+    const rate = type === 'gun' ? 0.02 : 0.01;
+    const bonusBruto = valueBRL * rate;
+    const myBonus = isNaN(myPct) ? bonusBruto : bonusBruto * (myPct / 100);
+
+    preview.style.display = 'block';
+    preview.innerHTML = `Fatura: <strong>${fmt(valueBRL)}</strong> · Bônus bruto: <strong>${fmt(bonusBruto)}</strong> · Seu bônus: <strong>${fmt(myBonus)}</strong>`;
+  }
+
   function updateCurrencyLabel() {
     const currency = document.getElementById('f-currency').value;
     const label = document.getElementById('f-value-label');
@@ -559,8 +581,9 @@
     const valueBRL = currency === 'USD' ? inputVal * USD_TO_BRL : inputVal;
     const rate = type === 'gun' ? 0.02 : 0.01;
     const bonusBruto = valueBRL * rate;
-    const myValueBRL = valueBRL * (myPct / 100);
-    const myBonus = bonusBruto * (myPct / 100);
+    const myFraction = myPct / 100;
+    const myValueBRL = valueBRL * myFraction;
+    const myBonus = bonusBruto * myFraction;
 
     const entry = {
       id: Date.now(),
